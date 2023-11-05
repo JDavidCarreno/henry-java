@@ -10,8 +10,12 @@ import java.util.Scanner;
 
 public class Main {
     public static int counter = 1;
+
+    //REVISAR EXCEPTIONS
     public static void main(String[] args) throws InvalidExpenseException {
         Scanner scanner = new Scanner(System.in);
+
+        //AGREGAR BUCLE WHILE PARA GENERAR MENU
 
         boolean isWrongType = false;
         int index = 0;
@@ -31,6 +35,9 @@ public class Main {
         } while (isWrongType);
 
         Expense[] arrayExpenses = new Expense[cantGastosAIngresar];
+
+
+        //HACERLO DE OTRA MANERA QUE NO SEA CON DO WHILE
 
         do {
             Expense expense = new Expense();
