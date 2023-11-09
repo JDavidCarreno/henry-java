@@ -1,27 +1,23 @@
 package Entities;
 
 public class Expense {
+    private static Integer id_counter = 0;
     private Integer id;
     private Double amount;
     private ExpenseCategory category;
     private String date;
 
     public Expense() {
+        this.id = id_counter;
+        id_counter++;
     }
 
-    public Expense(Integer id, Double amount, ExpenseCategory category, String date) {
-        this.id = id;
+    public Expense(Double amount, ExpenseCategory category, String date) {
+        this.id = id_counter;
         this.amount = amount;
         this.category = category;
         this.date = date;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
+        id_counter++;
     }
 
     public Double getAmount() {

@@ -3,75 +3,100 @@ import Entities.ExpenseCategory;
 import Exceptions.InvalidExpenseException;
 import Intefaces.ExpenseAmountValidator;
 import Intefaces.ExpenseAmountValidatorImpl;
-import Intefaces.ExpenseCalculator;
-import Intefaces.ExpenseCalculatorImpl;
 
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     public static int counter = 1;
+    static Scanner scanner = new Scanner(System.in);
+    static List<Expense> list_of_expenses = new ArrayList<>();
+    static Map<String, Integer> map_categories = new HashMap<>();
 
     //REVISAR EXCEPTIONS
     public static void main(String[] args) throws InvalidExpenseException {
-        Scanner scanner = new Scanner(System.in);
+        menu();
+    }
 
-        //AGREGAR BUCLE WHILE PARA GENERAR MENU
+    public static void menu(){
+        while (true){
+            System.out.println("----MENU APP EXPENSES----");
+            System.out.println("1. Ingresar un gasto");
+            System.out.println("2. Ver gastos");
+            System.out.println("3. Ver categorias");
+            System.out.println("4. Salir");
+            System.out.print("Dijite el número de la acción que quiere realizar: ");
 
-        boolean isWrongType = false;
-        int index = 0;
-        Double amount;
-        int cantGastosAIngresar = 0;
+            String option = scanner.nextLine();
 
-        ExpenseAmountValidator expenseAmountValidator = new ExpenseAmountValidatorImpl();
-        ExpenseCalculator expenseCalculator = new ExpenseCalculatorImpl();
-
-        do {
-            System.out.println("Cuantos gastos va a ingresar a registrar: ");
-            if (scanner.hasNextInt()) {
-                cantGastosAIngresar = scanner.nextInt();
-            } else {
-                System.out.println("Dato erroneo");
-            }
-        } while (isWrongType);
-
-        Expense[] arrayExpenses = new Expense[cantGastosAIngresar];
-
-
-        //HACERLO DE OTRA MANERA QUE NO SEA CON DO WHILE
-
-        do {
-            Expense expense = new Expense();
-            ExpenseCategory expenseCategory = new ExpenseCategory();
-            System.out.println("Ingresa el valor del gasto: ");
-            amount = scanner.nextDouble();
-
-            if (!expenseAmountValidator.validateAmount(amount)) {
-                System.out.println("Monto válido");
+            if (option.equals("1")) {
+                createExpense();
+                scanner.nextLine();
+                continue;
             }
 
-            scanner.nextLine();
+            if (option.equals("2")){
+                watchExpenses();
+                continue;
+            }
 
-            System.out.println("Ingrese la categoria del gasto: ");
-            String name = scanner.nextLine().toLowerCase().trim();
-            expenseCategory.setName(name);
+            if (option.equals("3")){
+                for (Map.Entry<String, Integer> entry : map_categories.entrySet()) {
+                    String key = entry.getKey();
+                    Integer value = entry.getValue();
+                    System.out.println(key + " : " + value);
+                }
+                continue;
+            }
 
-            System.out.println("Ingrese la fecha del gasto (dd/mm/yyyy)");
-            String date = scanner.nextLine().toLowerCase().trim();
+            if (option.equals("4")) {
+                break;
+            }
 
-            expense.setId(counter);
-            expense.setAmount(amount);
-            expense.setCategory(expenseCategory);
-            expense.setDate(date);
+            System.out.println("Opcion incorrecta, dijite 1, 2 o 3");
+        }
+    }
 
-            arrayExpenses[index] = expense;
-            counter++;
-            index++;
-        } while (index < cantGastosAIngresar);
+    public static void createExpense(){
+        Expense expense = new Expense();
+        System.out.print("Ingrese la fecha del gasto: (dd/mm/yyyy): ");
+        String date = scanner.nextLine().trim();
+        expense.setDate(date);
 
-        System.out.println("El total de gastos ingresados fue de: " + expenseCalculator.calculateTotalExpense(arrayExpenses));
+        System.out.print("Ingrese la categoría del gasto: ");
+        ExpenseCategory expenseCategory = new ExpenseCategory();
+        String name_category = scanner.nextLine().toLowerCase().trim();
+        expenseCategory.setName(name_category);
 
-        for (Expense expense : arrayExpenses) {
-            System.out.println(expense);
+        expense.setCategory(expenseCategory);
+
+        while (true) {
+            try {
+                System.out.print("Ingrese el monto a guardar: ");
+                Double amount = scanner.nextDouble();
+                ExpenseAmountValidator expenseAmountValidator = new ExpenseAmountValidatorImpl();
+                expenseAmountValidator.validateAmount(amount);
+                expense.setAmount(amount);
+                list_of_expenses.add(expense);
+
+                map_categories.put(name_category, (map_categories.containsKey(name_category) ? map_categories.get(name_category) + 1 : 1));
+
+                System.out.println("Gasto guardado exitosamente!");
+                break;
+            } catch (InvalidExpenseException | InputMismatchException e) {
+                System.out.println("Valor inválido, recuerde que debe ser un número mayor a 0, intente de nuevo ");
+                scanner.nextLine();
+            }
+        }
+
+    }
+
+    public static void watchExpenses(){
+        if (!list_of_expenses.isEmpty()) {
+            for (Expense expense : list_of_expenses){
+                System.out.println(expense);
+            }
+        } else {
+            System.out.println("No hay gastos ingresados aún!");
         }
     }
 }
