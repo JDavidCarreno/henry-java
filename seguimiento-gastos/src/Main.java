@@ -1,18 +1,15 @@
 import Entities.Expense;
 import Entities.ExpenseCategory;
 import Exceptions.InvalidExpenseException;
-import Intefaces.ExpenseAmountValidator;
-import Intefaces.ExpenseAmountValidatorImpl;
+import Intefaces.*;
 
 import java.util.*;
 
 public class Main {
-    public static int counter = 1;
     static Scanner scanner = new Scanner(System.in);
     static List<Expense> list_of_expenses = new ArrayList<>();
     static Map<String, Integer> map_categories = new HashMap<>();
 
-    //REVISAR EXCEPTIONS
     public static void main(String[] args) throws InvalidExpenseException {
         menu();
     }
@@ -40,11 +37,7 @@ public class Main {
             }
 
             if (option.equals("3")){
-                for (Map.Entry<String, Integer> entry : map_categories.entrySet()) {
-                    String key = entry.getKey();
-                    Integer value = entry.getValue();
-                    System.out.println(key + " : " + value);
-                }
+                map_categories.forEach((key, value) -> System.out.println(key + " : " + value));
                 continue;
             }
 
@@ -91,12 +84,58 @@ public class Main {
     }
 
     public static void watchExpenses(){
-        if (!list_of_expenses.isEmpty()) {
-            for (Expense expense : list_of_expenses){
-                System.out.println(expense);
+        System.out.println("1. Ver detalle de todos los gastos");
+        System.out.println("2. Ver total de gastos");
+        System.out.println("3. Ver gastos por filtro");
+        System.out.println("4. Volver");
+
+        String option2 = scanner.nextLine();
+
+        if(option2.equals("1")){
+            if (!list_of_expenses.isEmpty()) {
+                list_of_expenses.forEach(System.out::println);
+            } else {
+                System.out.println("No hay gastos ingresados aún!");
             }
-        } else {
-            System.out.println("No hay gastos ingresados aún!");
+            return;
         }
+
+        if (option2.equals("2")) {
+            ExpenseCalculator expenseCalculator = new ExpenseCalculatorImpl();
+            System.out.println("El total de gastos es: " + expenseCalculator.calculateTotalExpense(list_of_expenses));
+            return;
+        }
+
+        if(option2.equals("3")) {
+            menuFilters();
+            return;
+        }
+
+        if (option2.equals("4")) return;
+
+        System.out.println("Esta opción no es válida");
+        watchExpenses();
+    }
+
+    public static void menuFilters(){
+        System.out.println("FILTROS-------");
+        System.out.println("1. Gastos mayores a 100: ");
+        System.out.println("2. Volver");
+
+        String option3 = scanner.nextLine();
+
+        if (option3.equals("1")){
+            Filter filter = new FilterImpl();
+            System.out.println("Los gastos mayores a 100 son:");
+            System.out.println(filter.filter(list_of_expenses, expense -> expense.getAmount() > 100));
+            return;
+        }
+
+        if (option3.equals("2")){
+            return;
+        }
+
+        System.out.println("Opcion no válida");
+        menuFilters();
     }
 }

@@ -2,6 +2,8 @@ package Intefaces;
 
 import Entities.Expense;
 
+import java.util.List;
+
 public class ExpenseCalculatorImpl implements ExpenseCalculator {
     @Override
     public double calculateExpense(Expense expense) {
@@ -9,11 +11,9 @@ public class ExpenseCalculatorImpl implements ExpenseCalculator {
     }
 
     @Override
-    public double calculateTotalExpense(Expense[] expenses) {
-        double total = 0;
-        for (Expense expense : expenses) {
-            total += expense.getAmount();
-        }
-        return total;
+    public double calculateTotalExpense(List<Expense> expenses) {
+        return expenses.stream()
+                .mapToDouble(Expense::getAmount)
+                .reduce(0, Double::sum);
     }
 }

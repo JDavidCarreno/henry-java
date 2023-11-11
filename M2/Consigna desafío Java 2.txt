@@ -1,0 +1,20 @@
+Aplicacion de consola de Java que simule un sistema de gestión de Estudiantes y Curso
+
+
+Los lineamientos generales son:
+
+- Definir las clase Estudiante con propiedades como nombre, edad y cursos (un estudiante puede estar anotado a más de un curso). Esta propiedad será una lista de tipo Curso
+
+- Definir la clase Curso que solo tenga una propiedad, el nombre
+
+
+En el main, vamos a realizar las siguientes operaciones:
+
+- Instanciar una lista de Estudiante y agregar 5 o más estudiantes a la misma
+
+- Filtrar los estudiantes que esten anotados al curso "Introducción a la Programación". mostrar por consola
+
+- Fitrar todos los estudiantes mayores de 25 años y mostrar por consola. Para este filtrado, debemos intentar hacer un método que acepte como argumentos la lista de estudiantes y un Predicate. Ese Predicate será una lambda con la condicion que deseemos filtrar en esa lista. Podría ser que la edad sea mayor a 25 o incluso, reutilizar la condicion previa de anotados a un curso determinado 
+
+- Por último, debemos filtrar un estudiante de la lista y mapear todos los cursos a los que esté anotado. Pensar que primero debemos filtrar ese nombre del estudiante y luego de encontrarlo, iterar los cursos a los que esté anotado para mapearlos, realizanod un Collectors.toList a una nueva lista. Mostrar por consola.
+
