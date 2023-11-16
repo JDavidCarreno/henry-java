@@ -10,7 +10,7 @@ public class Main {
     static List<Expense> list_of_expenses = new ArrayList<>();
     static Map<String, Integer> map_categories = new HashMap<>();
 
-    public static void main(String[] args) throws InvalidExpenseException {
+    public static void main(String[] args){
         menu();
     }
 
@@ -93,7 +93,8 @@ public class Main {
 
         if(option2.equals("1")){
             if (!list_of_expenses.isEmpty()) {
-                list_of_expenses.forEach(System.out::println);
+                Listing<Expense> list = new ListingImpl<>();
+                list.listingElements(list_of_expenses);
             } else {
                 System.out.println("No hay gastos ingresados aún!");
             }
