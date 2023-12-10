@@ -1,15 +1,13 @@
-package Entities;
+package dao.dto;
 
-public class ExpenseCategory {
-    private Integer id;
+public class ExpenseCategoryDto {
     private String name;
     private Integer amount;
 
-    public ExpenseCategory() {
+    public ExpenseCategoryDto() {
     }
 
-    public ExpenseCategory(Integer id, String name, Integer amount) {
-        this.id = id;
+    public ExpenseCategoryDto(String name, Integer amount) {
         this.name = name;
         this.amount = amount;
     }
@@ -22,14 +20,6 @@ public class ExpenseCategory {
         this.name = name;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public Integer getAmount() {
         return amount;
     }
@@ -40,8 +30,9 @@ public class ExpenseCategory {
 
     @Override
     public String toString() {
-        return "ExpenseCategory{" +
+        return "ExpenseCategoryDto{" +
                 "name='" + name + '\'' +
+                ", amount=" + amount +
                 '}';
     }
 }

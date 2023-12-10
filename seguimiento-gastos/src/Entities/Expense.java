@@ -2,9 +2,9 @@ package Entities;
 
 public class Expense {
     private static Integer id_counter = 0;
-    private Integer id;
+    private final Integer id;
     private Double amount;
-    private ExpenseCategory category;
+    private Integer expenseCategoryId;
     private String date;
 
     public Expense() {
@@ -12,10 +12,10 @@ public class Expense {
         id_counter++;
     }
 
-    public Expense(Double amount, ExpenseCategory category, String date) {
+    public Expense(Double amount, Integer expenseCategoryId, String date) {
         this.id = id_counter;
         this.amount = amount;
-        this.category = category;
+        this.expenseCategoryId = expenseCategoryId;
         this.date = date;
         id_counter++;
     }
@@ -28,12 +28,12 @@ public class Expense {
         this.amount = amount;
     }
 
-    public ExpenseCategory getCategory() {
-        return category;
+    public Integer getCategoryId() {
+        return expenseCategoryId;
     }
 
-    public void setCategory(ExpenseCategory category) {
-        this.category = category;
+    public void setCategory(Integer expenseCategoryId) {
+        this.expenseCategoryId = expenseCategoryId;
     }
 
     public String getDate() {
@@ -44,12 +44,16 @@ public class Expense {
         this.date = date;
     }
 
+    public Integer getId() {
+        return id;
+    }
+
     @Override
     public String toString() {
         return "Expense{" +
                 "id=" + id +
                 ", amount=" + amount +
-                ", category=" + category +
+                ", category=" + expenseCategoryId +
                 ", date='" + date + '\'' +
                 '}';
     }

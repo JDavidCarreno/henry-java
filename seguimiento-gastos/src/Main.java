@@ -2,6 +2,12 @@ import Entities.Expense;
 import Entities.ExpenseCategory;
 import Exceptions.InvalidExpenseException;
 import Intefaces.*;
+import dao.ExpenseCategoryDao;
+import dao.ExpenseDao;
+import dao.dto.ExpenseCategoryDto;
+import dao.dto.ExpenseDto;
+import dao.impl.ExpenseCategoryDaoImpl;
+import dao.impl.ExpenseDaoImpl;
 
 import java.util.*;
 
@@ -50,17 +56,26 @@ public class Main {
     }
 
     public static void createExpense(){
-        Expense expense = new Expense();
+        ExpenseDao expenseDao = new ExpenseDaoImpl();
+        ExpenseCategoryDao expenseCategoryDao = new ExpenseCategoryDaoImpl();
+
+        ExpenseDto expenseDto = new ExpenseDto();
         System.out.print("Ingrese la fecha del gasto: (dd/mm/yyyy): ");
         String date = scanner.nextLine().trim();
-        expense.setDate(date);
+        expenseDto.setDate(date);
 
         System.out.print("Ingrese la categoría del gasto: ");
-        ExpenseCategory expenseCategory = new ExpenseCategory();
+        ExpenseCategoryDto expenseCategoryDto = new ExpenseCategoryDto();
         String name_category = scanner.nextLine().toLowerCase().trim();
-        expenseCategory.setName(name_category);
+        expenseCategoryDto.setName(name_category);
 
-        expense.setCategory(expenseCategory);
+        expenseCategoryDao.create(expenseCategoryDto);
+
+        ExpenseCategory newExpenseCategory = expenseCategoryDao.getByName(expenseCategoryDto.getName());
+
+        Integer idExpenseCategory = newExpenseCategory.getId();
+
+        expenseDto.setCategoryId(idExpenseCategory);
 
         while (true) {
             try {
@@ -68,10 +83,9 @@ public class Main {
                 Double amount = scanner.nextDouble();
                 ExpenseAmountValidator expenseAmountValidator = new ExpenseAmountValidatorImpl();
                 expenseAmountValidator.validateAmount(amount);
-                expense.setAmount(amount);
-                list_of_expenses.add(expense);
+                expenseDto.setAmount(amount);
 
-                map_categories.put(name_category, (map_categories.containsKey(name_category) ? map_categories.get(name_category) + 1 : 1));
+                expenseDao.create(expenseDto);
 
                 System.out.println("Gasto guardado exitosamente!");
                 break;
